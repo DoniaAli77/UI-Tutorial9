@@ -1,0 +1,13 @@
+.centerImg {
+    display: block;
+    margin: 0 auto;
+}
+
+.center {
+  text-align: center;
+}
+.city{
+  text-align: left;
+  color: aqua;
+  background-color: black;
+}

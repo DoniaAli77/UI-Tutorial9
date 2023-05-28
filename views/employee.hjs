@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Employees</title>
+  <link rel='stylesheet' href='/styles/bootstrap.min.css' />
+  <link rel='stylesheet' href='/styles/style.css' />
+  <script src="/js/jquery-2.2.0.min.js" type="text/javascript"></script>
+  <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+  <script>
+    $(document).ready(function () {
+      //console.log("data",{{data}});
+      $.ajax({
+        type: "GET",
+        url: '/api/v1/employees/view',
+        success: function (data) {
+                        console.log(data)
+
+            for (let row of data) {
+              console.log(data)
+              let date = new Date(row.birthdate);
+              let formattedDate = `${(date.getMonth() + 1)}/${date.getDate()}/${date.getFullYear()}`;
+              $('#tbody').append(
+                `<tr>
+                          <td class="text-center">${row.id}</td>
+                          <td class="text-center">${row.firstname}</td>
+                          <td class="text-center">${row.middlename}</td>
+                          <td class="text-center">${row.lastname}</td>
+                          <td class="text-center">${row.country}</td>
+                          <td class="text-center">${row.salary}</td>
+                          <td class="text-center">${formattedDate}</td>
+                          <td class="text-center">
+                            <button id=${row.id} class="btn btn-danger remove" type="button">Remove</button>
+                          </td>
+                    </tr>`);
+            
+
+          }
+        },
+        error: function (error) {
+          alert(error)
+          console.log("error message", error.responseText);
+        }
+      });
+
+      $('#tbody').on('click', '.remove', function () {
+        console.log("removed");
+        var id = $(this).attr("id");
+        $(this).parent().parent().remove();
+        $.ajax({
+          type: "DELETE",
+          data: { message: "deleted" },
+          url: '/api/v1/employee/' + `${id}`,
+          success: function (data) {
+            alert(data)
+            
+          }
+        });
+      });
+
+    });      
+  </script>
+
+  <div>
+    <nav class="navbar navbar-inverse" style="padding-left:130px;">
+      <ul class="nav navbar-nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/department">Update employees salary for each department</a></li>
+
+        <li><a href="/profile">Profile</a></li>
+        <li id="employee" class="active"><a href="/employee">Employee</a></li>
+        <li id="add"><a href="/addEmployee">Add</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th class="text-center">ID</th>
+          <th class="text-center">FirstName</th>
+          <th class="text-center">MiddleName</th>
+          <th class="text-center">LastName</th>
+          <th class="text-center">Country</th>
+          <th class="text-center">Salary</th>
+          <th class="text-center">Birthdate</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+
+      </tbody>
+    </table>
+  </div>
+
+</body>
+
+</html>

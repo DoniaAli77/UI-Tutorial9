@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <head>
+        <link rel='stylesheet' href='/styles/bootstrap.min.css' />
+        <link rel='stylesheet' href='/styles/style.css' />
+        <script src="/js/jquery-2.2.0.min.js" type="text/javascript"></script>
+        <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    </head>
+</head>
+
+<body>
+
+    <script>
+
+        $(document).ready(function () {
+                var empArray = [];
+
+            // Handle Autocomplete Selection Change
+            $(".dropdown-menu li a").click(function () {
+                const index = $(this).attr('index');
+                $("#departmentDropdown").attr('index', index);
+                $("#departmentDropdown").text($(this).text());
+
+
+                const code = $('#departmentDropdown').text();
+                console.log(code);
+                $('#tbody').empty();
+                $('#thead').empty();
+                empArray = [];
+                $.ajax({
+                    type: "GET",
+                    url: `/api/v1/employee/dep/` + `${code}`,
+                    success: function (data) {
+                        if (data) {
+                            $('#thead').append(`
+                      <tr>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Department</th>
+                        <th class="text-center">Salary</th>
+                      </tr>
+                `);
+                            for (let i = 0; i < data.length; i++) {
+                                let row = data[i]
+                                $('#tbody').append(
+                                    `<tr>
+                              <td class="text-center">${row.firstname}</td>
+                              <td class="text-center">${row.depName}</td>
+                              <td class="text-center">
+                                <div class="col-sm-10">
+                                    <input type="text"  id=${i} name="salary" placeholder="Enter salary" value=${row.salary} required >
+                                </div>
+                              </td>
+                        </tr>`);
+                                empArray.push({ id: row.id, salary: row.salary });
+                            }
+                            $('#div-btn').css("display", "block");
+                        }
+                    },
+                    error: function (err) {
+                        console.log("error message", err.responseText);
+                    }
+                });
+            });
+
+
+            $('#update').click(function () {
+                if ($('#div-btn').css("display") == 'none') {
+                    return;
+                }
+
+                for (let i = 0; i < empArray.length; i++) {
+                    empArray[i].salary = parseFloat($(`#${i}`).val());
+                }
+                console.log("here", empArray)
+                const obj = { row: empArray };
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/employee/update',
+                    data: obj,
+                    success: function (data) {
+                        if (data) {
+                            console.log(data);
+                            $('#tbody').empty();
+                            $('#thead').empty();
+                            $('#div-btn').css("display", "none");
+                            alert(data);
+                        }
+                    },
+                    error:function(err){
+                        console.log(err);
+                        alert(err.message);
+                    }
+                });
+
+            });
+
+
+
+        });    
+    </script>
+
+    <div>
+        <nav class="navbar navbar-inverse" style="padding-left:130px;">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                <li><a href="/department" class="active">Update employees salary for each department</a></li>
+
+                <li><a href="/profile">Profile</a></li>
+                <li id="employee" ><a href="/employee">Employee</a></li>
+                <li id="add"><a href="/addEmployee">Add</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="container">
+        <br />
+        <br />
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="faculty" class="col-sm-2 control-label">department</label>
+                <div class="col-sm-10">
+                    <div class="btn-group">
+                        <button index=0 id='departmentDropdown' class="btn">which department</button>
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            {{#departmets}}
+                            <li><a index="{{id}}">{{name}}</a></li>
+                            {{/departmets}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+        <table class="table table-striped" id="updateTable">
+            <thead id="thead">
+
+            </thead>
+            <tbody id="tbody">
+
+            </tbody>
+        </table>
+        <div class="center" style="display : none" id="div-btn">
+            <input id="update" name="updateBtn" type="button" value="Update" class="btn btn-primary">
+        </div>
+        <br />
+    </div>
+
+</body>
+
+</html>

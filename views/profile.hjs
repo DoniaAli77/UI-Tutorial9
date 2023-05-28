@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <head>
+    <link rel='stylesheet' href='/styles/bootstrap.min.css' />
+    <link rel='stylesheet' href='/styles/style.css' />
+    <script src="/js/jquery-2.2.0.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+  </head>
+</head>
+
+<body>
+  <script>
+    $(document).ready(function () {
+      var id;
+      $('#getInfo').click(function () {
+        id = $('#eid').val();
+        if (!id) {
+          return;
+        }
+        console.log(id)
+        $.ajax({
+          type: "GET",
+          url: `/api/v1/employee/${id}`,
+          success: function (data) {
+            if (data) {
+              if (data.length == 0) {
+
+                $('#fname').val('');
+                $('#mname').val('');
+                $('#lname').val('');
+                $('#salary').val('');
+                $('#country').val('');
+                $('#birthdate').val('');
+                alert('This employee id doesnot exists');
+                return;
+              }
+              // {"id":30,"firstname":"Donia","middlename":"ali","lastname":"ali","country":"Egypt","salary":30000,"birthdate":"1999-07-05T21:00:00.000Z"}
+              const { id, firstname, middlename, lastname, salary, country, birthdate } = data[0];
+              let date = new Date(birthdate);
+              let formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()}`
+              let [year, month, day] = formattedDate.split("-");
+              month = month.length == 1 ? "0" + month : month;
+              day = day.length == 1 ? "0" + day : day;
+              formattedDate = `${year}-${month}-${day}`;
+              $('#fname').val(firstname);
+              $('#mname').val(middlename);
+              $('#lname').val(lastname);
+              $('#salary').val(salary);
+              $('#country').val(country);
+              $('#birthdate').val(formattedDate);
+            }
+          }
+          ,
+          error: function (error) {
+            alert(error);
+          }
+        });
+      });
+
+      $("#submit").click(function () {
+        console.log("here", id)
+        const firstname = $('#fname').val();
+        const middlename = $('#mname').val();
+        const lastname = $('#lname').val();
+        const salary = $('#salary').val();
+        const country = $('#country').val();
+        const birthdate = $('#birthdate').val();
+        if (!firstname || !middlename || !lastname || !salary || !country || !birthdate) {
+          return;
+        }
+
+
+        const data = {
+          firstname,
+          middlename,
+          lastname,
+          salary,
+          country,
+          birthdate
+
+        };
+
+        $.ajax({
+          type: "PUT",
+          url: `/api/v1/employee/${id}`,
+          data
+          success: function (data) {
+            if (data) {
+              console.log(data);
+              alert("succesfully updated")
+            }
+          },
+          error: function (err) {
+
+            alert(err)
+
+          }
+        });
+      });
+
+
+    });      
+  </script>
+
+  <div>
+    <nav class="navbar navbar-inverse" style="padding-left:130px;">
+      <ul class="nav navbar-nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/department">Update employees salary for each department</a></li>
+
+        <li class="active"><a href="/profile">Profile</a></li>
+
+        <li><a href="/employee">Employee</a></li>
+        <li><a href="/addEmployee">Add</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div>
+
+    <form class="form-horizontal" style="width: 70%;">
+      <div class="form-group">
+        <label for="emp_id" class="col-sm-2 control-label">Employee ID</label>
+        <div class="col-sm-10">
+          <input type="text" id="eid" name="eid" placeholder="ID" value="" required>
+          <input id="getInfo" name="submit" type="button" value="view" class="btn btn-primary">
+        </div>
+
+      </div>
+      <div class="form-group">
+        <label for="fname" class="col-sm-2 control-label">First Name</label>
+        <div class="col-sm-10">
+          <input type="text" id="fname" name="fname" placeholder="First Name" value="" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="mname" class="col-sm-2 control-label">Middle Name</label>
+        <div class="col-sm-10">
+          <input type="text" id="mname" name="mname" placeholder="Middle Name" value="" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="lname" class="col-sm-2 control-label">Last Name</label>
+        <div class="col-sm-10">
+          <input type="text" id="lname" name="lname" placeholder="Last Name" value="" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="country" class="col-sm-2 control-label">Country</label>
+        <div class="col-sm-10">
+          <input type="text" id="country" name="country" placeholder="enter your country" value="" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="salary" class="col-sm-2 control-label">Salary</label>
+        <div class="col-sm-10">
+          <input type="text" id="salary" name="salary" placeholder="amount of your salary" value="" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="birthdate" class="col-sm-2 control-label">Birth Date</label>
+        <div class="col-sm-10">
+          <input type="date" id="birthdate" name="birthdate" placeholder="date of your birth" value="" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+          <input id="submit" name="submit" type="submit" value="submit" class="btn btn-primary">
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+</body>
+
+</html>
