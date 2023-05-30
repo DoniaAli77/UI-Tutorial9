@@ -86,7 +86,7 @@
         $.ajax({
           type: "PUT",
           url: `/api/v1/employee/${id}`,
-          data
+          data,
           success: function (data) {
             if (data) {
               console.log(data);

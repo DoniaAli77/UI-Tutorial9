@@ -2,6 +2,7 @@ const db = require("../../db");
 module.exports = (app) => {
   // Main Home page
   app.get("/", (req, res) => {
+    
     return res.render("index", {
       title: "Tutorial 9",
       desc: "Tutorial is mainly about frontend",

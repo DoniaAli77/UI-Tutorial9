@@ -21,7 +21,13 @@
                 const salary = $('#salary').val();
                 const country = $('#country').val();
                 const birthdate = $('#birthdate').val();
-                const employeeObj = { firstname, middlename, lastname, salary, country, birthdate };
+                const employedaraeObj = {
+                     firstname,
+                      middlename, 
+                      lastname,
+                       salary, 
+                       country, 
+                       birthdate };
                 console.log(employeeObj)
 
                 $.ajax({

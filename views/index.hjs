@@ -19,13 +19,14 @@
       });
 
   </script>
-     <nav id="hi" class="navbar navbar-inverse" style="padding-left:130px;">
+     <nav id="hi" class="navbar navbar-inverse" style="padding-left:200px;">
       <ul class="nav navbar-nav">
         <li class="active"><a href="/">Home</a></li>
-                <li><a href="/department">Update employees salary for each department</a></li>
+        <li><a href="/department">Update employees salary for each department</a></li>
         <li><a href="/profile">Profile</a></li>
         <li id="employee"><a href="/employee">Employee</a></li>
         <li id="add"><a href="/addEmployee">Add</a></li>
+
       </ul>
     </nav>
   </div>

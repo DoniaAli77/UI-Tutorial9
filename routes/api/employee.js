@@ -32,6 +32,7 @@ module.exports = (app) => {
         country,
         salary,
         birthdate,
+        departmentid:1
       };
       const addedEmployee = await db("employees")
         .insert(newEmployee)

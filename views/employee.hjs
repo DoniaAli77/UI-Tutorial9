@@ -13,18 +13,20 @@
   <script>
     $(document).ready(function () {
       //console.log("data",{{data}});
+
+
       $.ajax({
         type: "GET",
         url: '/api/v1/employees/view',
         success: function (data) {
-                        console.log(data)
+          console.log(data)
 
-            for (let row of data) {
-              console.log(data)
-              let date = new Date(row.birthdate);
-              let formattedDate = `${(date.getMonth() + 1)}/${date.getDate()}/${date.getFullYear()}`;
-              $('#tbody').append(
-                `<tr>
+          for (let row of data) {
+            console.log(data)
+            let date = new Date(row.birthdate);
+            let formattedDate = `${(date.getMonth() + 1)}/${date.getDate()}/${date.getFullYear()}`;
+            $('#tbody').append(
+              `<tr>
                           <td class="text-center">${row.id}</td>
                           <td class="text-center">${row.firstname}</td>
                           <td class="text-center">${row.middlename}</td>
@@ -36,7 +38,7 @@
                             <button id=${row.id} class="btn btn-danger remove" type="button">Remove</button>
                           </td>
                     </tr>`);
-            
+
 
           }
         },
@@ -45,6 +47,7 @@
           console.log("error message", error.responseText);
         }
       });
+
 
       $('#tbody').on('click', '.remove', function () {
         console.log("removed");
@@ -56,7 +59,10 @@
           url: '/api/v1/employee/' + `${id}`,
           success: function (data) {
             alert(data)
-            
+
+          }
+          error: function (data) {
+            alert(data)
           }
         });
       });
