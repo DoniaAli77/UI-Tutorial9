@@ -91,7 +91,7 @@
                     },
                     error:function(err){
                         console.log(err);
-                        alert(err.message);
+                        alert(err.responseText);
                     }
                 });
 

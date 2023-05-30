@@ -47,8 +47,8 @@
 
                     },
                     error: function (err) {
-                        console.log(err.message)
-                        alert(err.message);
+                        console.log(err.responseText)
+                        alert(err.responseText);
 
                     }
                 });

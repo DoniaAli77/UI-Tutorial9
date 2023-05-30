@@ -55,7 +55,7 @@
           }
           ,
           error: function (error) {
-            alert(error);
+            alert(error.responseText);
           }
         });
       });
@@ -95,7 +95,7 @@
           },
           error: function (err) {
 
-            alert(err)
+            alert(err.responseText)
 
           }
         });
